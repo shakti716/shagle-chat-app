@@ -1,14 +1,21 @@
 # Shagle
 
-A random chat website similar to Omegle, built with Node.js, Express, and Socket.io.
+A professional random chat and video calling platform inspired by Omegle, built with modern web technologies.
 
 ## Features
 
-- Random pairing of users for anonymous chat
-- Real-time messaging
-- Video calling with WebRTC
-- Disconnect and find next chat
-- Report user behavior
+- **Random Pairing**: Connect with strangers instantly
+- **Real-time Text Chat**: Seamless messaging with animated UI
+- **Video Calling**: Peer-to-peer video and audio with WebRTC
+- **User Reporting**: Report inappropriate behavior
+- **Responsive Design**: Works on desktop and mobile
+- **Modern UI**: Gradient backgrounds, smooth animations, and professional styling
+
+## Tech Stack
+
+- **Backend**: Node.js, Express, Socket.io
+- **Frontend**: HTML5, CSS3, JavaScript, WebRTC
+- **Deployment**: Ready for Railway, Heroku, or any Node.js host
 
 ## Installation
 
@@ -23,14 +30,26 @@ Run `npm run dev` to start with nodemon for auto-restart on changes.
 
 ## Deployment
 
-This app is ready for deployment on Heroku.
+This app is optimized for cloud deployment with WebSockets support.
 
-1. Create a Heroku account and install Heroku CLI.
-2. Initialize a Git repository: `git init`
-3. Add files: `git add .`
-4. Commit: `git commit -m "Initial commit"`
-5. Create Heroku app: `heroku create your-app-name`
-6. Push to Heroku: `git push heroku main`
-7. Open the app: `heroku open`
+### Railway (Recommended - Free)
+1. Push code to GitHub
+2. Deploy from Railway dashboard
+3. App runs at `https://your-app.railway.app`
 
-The app will be live on Heroku's URL.
+### Heroku
+1. Install Heroku CLI
+2. `heroku create your-app-name`
+3. `git push heroku main`
+4. `heroku open`
+
+## Usage
+
+- Open the app in multiple tabs to test
+- Click "Start Video" for video calls
+- Use "Next Chat" to find new partners
+- Report users if needed
+
+## License
+
+MIT License - Feel free to use and modify.
