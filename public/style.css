@@ -1,0 +1,100 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+#container {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  width: 400px;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+}
+
+#status {
+  margin: 10px 0;
+  font-weight: bold;
+}
+
+#chat {
+  display: none;
+}
+
+#videos {
+  display: none;
+  margin-bottom: 10px;
+}
+
+#localVideo, #remoteVideo {
+  width: 45%;
+  height: auto;
+  border: 1px solid #ccc;
+  margin: 0 2.5%;
+}
+
+#messages {
+  border: 1px solid #ccc;
+  height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fafafa;
+}
+
+.message {
+  margin: 5px 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.you {
+  background-color: #007bff;
+  color: white;
+  text-align: right;
+}
+
+.stranger {
+  background-color: #e9ecef;
+  color: black;
+  text-align: left;
+}
+
+input[type="text"] {
+  width: 70%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+#sendButton {
+  background-color: #28a745;
+  color: white;
+}
+
+#nextButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+#reportButton {
+  background-color: #ff6b6b;
+  color: white;
+}
