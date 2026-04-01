@@ -14,6 +14,7 @@ const videoButton = document.getElementById('videoButton');
 
 let peerConnection;
 let localStream;
+let isInitiator = false;
 
 socket.on('connect', () => {
   status.textContent = 'Waiting for a stranger...';
@@ -119,13 +120,26 @@ function sendMessage() {
   }
 }
 
-videoButton.addEventListener('click', startVideoCall);
-
-async function startVideoCall() {
+videoButton.addEventListener('click', async () => {
   try {
+    isInitiator = true;
+    await prepareVideoCall();
+    socket.emit('videoRequest');
+    videoButton.disabled = true;
+    addMessage('Video call request sent. Waiting for partner...', 'system');
+  } catch (error) {
+    console.error('Error starting video request', error);
+    alert('Unable to start video. Check your camera/microphone permissions.');
+  }
+});
+
+async function prepareVideoCall() {
+  if (!localStream) {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localVideo.srcObject = localStream;
+  }
 
+  if (!peerConnection) {
     peerConnection = new RTCPeerConnection({
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
@@ -137,6 +151,7 @@ async function startVideoCall() {
 
     peerConnection.ontrack = event => {
       remoteVideo.srcObject = event.streams[0];
+      videos.style.display = 'block';
     };
 
     peerConnection.onicecandidate = event => {
@@ -144,65 +159,64 @@ async function startVideoCall() {
         socket.emit('candidate', event.candidate);
       }
     };
-
-    const offer = await peerConnection.createOffer();
-    await peerConnection.setLocalDescription(offer);
-    socket.emit('offer', offer);
-
-    videos.style.display = 'block';
-    videoButton.style.display = 'none';
-  } catch (error) {
-    console.error('Error starting video call:', error);
-    alert('Could not access camera/microphone. Please check permissions.');
   }
 }
 
+socket.on('videoRequest', async () => {
+  if (!chat.style.display || chat.style.display === 'none') return;
+  addMessage('Stranger requested video call. Starting...', 'system');
+  await prepareVideoCall();
+  socket.emit('videoReady');
+  videoButton.style.display = 'none';
+});
+
+socket.on('videoReady', async () => {
+  if (!isInitiator) return;
+  try {
+    const offer = await peerConnection.createOffer();
+    await peerConnection.setLocalDescription(offer);
+    socket.emit('offer', offer);
+    videos.style.display = 'block';
+  } catch (error) {
+    console.error('Error sending offer', error);
+  }
+});
+
 socket.on('offer', async (offer) => {
   try {
-    localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    localVideo.srcObject = localStream;
-
-    peerConnection = new RTCPeerConnection({
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
-      ]
-    });
-
-    localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
-    peerConnection.ontrack = event => {
-      remoteVideo.srcObject = event.streams[0];
-    };
-
-    peerConnection.onicecandidate = event => {
-      if (event.candidate) {
-        socket.emit('candidate', event.candidate);
-      }
-    };
-
-    await peerConnection.setRemoteDescription(offer);
+    if (!peerConnection) {
+      await prepareVideoCall();
+    }
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(offer));
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
     socket.emit('answer', answer);
-
     videos.style.display = 'block';
-    videoButton.style.display = 'none';
   } catch (error) {
-    console.error('Error answering video call:', error);
-    alert('Could not access camera/microphone. Please check permissions.');
+    console.error('Error handling offer', error);
   }
 });
 
 socket.on('answer', async (answer) => {
-  await peerConnection.setRemoteDescription(answer);
+  try {
+    await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
+  } catch (error) {
+    console.error('Error handling answer', error);
+  }
 });
 
 socket.on('candidate', async (candidate) => {
-  await peerConnection.addIceCandidate(candidate);
+  try {
+    if (candidate && peerConnection) {
+      await peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    }
+  } catch (error) {
+    console.error('Error adding ICE candidate', error);
+  }
 });
 
 function closeVideoCall() {
+  isInitiator = false;
   if (peerConnection) {
     peerConnection.close();
     peerConnection = null;
@@ -213,4 +227,7 @@ function closeVideoCall() {
   }
   localVideo.srcObject = null;
   remoteVideo.srcObject = null;
+  videoButton.style.display = 'inline-block';
+  videoButton.disabled = false;
+  videos.style.display = 'none';
 }

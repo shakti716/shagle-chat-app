@@ -118,6 +118,20 @@ io.on('connection', (socket) => {
   });
 
   // WebRTC signaling
+  socket.on('videoRequest', () => {
+    const chatInfo = activeChats.get(socket.id);
+    if (chatInfo) {
+      socket.to(chatInfo.room).emit('videoRequest');
+    }
+  });
+
+  socket.on('videoReady', () => {
+    const chatInfo = activeChats.get(socket.id);
+    if (chatInfo) {
+      socket.to(chatInfo.room).emit('videoReady');
+    }
+  });
+
   socket.on('offer', (offer) => {
     const chatInfo = activeChats.get(socket.id);
     if (chatInfo) {
