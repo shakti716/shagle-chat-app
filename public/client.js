@@ -126,7 +126,12 @@ async function startVideoCall() {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localVideo.srcObject = localStream;
 
-    peerConnection = new RTCPeerConnection();
+    peerConnection = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ]
+    });
 
     localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
@@ -148,6 +153,7 @@ async function startVideoCall() {
     videoButton.style.display = 'none';
   } catch (error) {
     console.error('Error starting video call:', error);
+    alert('Could not access camera/microphone. Please check permissions.');
   }
 }
 
@@ -156,7 +162,12 @@ socket.on('offer', async (offer) => {
     localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
     localVideo.srcObject = localStream;
 
-    peerConnection = new RTCPeerConnection();
+    peerConnection = new RTCPeerConnection({
+      iceServers: [
+        { urls: 'stun:stun.l.google.com:19302' },
+        { urls: 'stun:stun1.l.google.com:19302' }
+      ]
+    });
 
     localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
 
@@ -179,6 +190,7 @@ socket.on('offer', async (offer) => {
     videoButton.style.display = 'none';
   } catch (error) {
     console.error('Error answering video call:', error);
+    alert('Could not access camera/microphone. Please check permissions.');
   }
 });
 
