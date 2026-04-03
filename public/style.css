@@ -89,7 +89,7 @@ body {
 
 #appGrid {
   display: grid;
-  grid-template-columns: 1.65fr 1fr;
+  grid-template-columns: 1.55fr 1fr;
   gap: 16px;
 }
 
@@ -99,18 +99,64 @@ body {
   gap: 12px;
 }
 
+#chartRight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 #video-stage {
+  position: relative;
   border-radius: 16px;
   background: rgba(2, 5, 20, 0.55);
   border: 1px solid var(--panel-border);
-  padding: 12px;
+  padding: 0;
+  min-height: 460px;
+  overflow: hidden;
 }
 
-#videoTiles {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+.videoCard {
+  position: absolute;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: #000;
 }
+
+.videoBig {
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+}
+
+.videoSmall {
+  width: 180px;
+  height: 140px;
+  bottom: 14px;
+  right: 14px;
+  z-index: 3;
+}
+
+.videoCard video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.videoTag {
+  position: absolute;
+  bottom: 9px;
+  left: 9px;
+  background: rgba(0,0,0,0.55);
+  color: #fbfbfb;
+  font-size: 0.78rem;
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+
+#videoTiles { display: none; }
+
 
 .videoCard {
   position: relative;
