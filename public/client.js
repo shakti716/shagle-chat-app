@@ -138,12 +138,13 @@ socket.on('partnerDisconnected', () => {
       statusChat.style.display = 'block';
       statusChat.textContent = 'Waiting for a stranger...';
       chatOnly.style.display = 'none';
+      socket.emit('ready', { mode: 'chat' });
     } else {
       status.style.display = 'block';
       status.textContent = 'Waiting for a stranger...';
       chat.style.display = 'none';
+      socket.emit('ready', { mode: 'video' });
     }
-    socket.emit('ready');
   }, 2000);
 });
 
