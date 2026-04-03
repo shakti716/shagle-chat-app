@@ -300,8 +300,84 @@ body {
   #videoTiles { grid-template-columns: 1fr; }
 }
 
-@media(max-width: 600px) {
-  #container { padding: 12px; }
-  #topBar { flex-direction: column; align-items: flex-start; gap: 8px; }
-  #themeToggle { width: 100%; }
+#selectionScreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+#selectionScreen h2 {
+  margin-bottom: 30px;
+  font-size: 1.8rem;
+  color: var(--text);
+}
+
+.optionButtons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.optionButtons button {
+  padding: 15px 30px;
+  border-radius: 25px;
+  border: none;
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.optionButtons button:hover {
+  transform: translateY(-3px);
+}
+
+#chatOnlyGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+#chatOnlyRight {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#statusChat {
+  font-size: 0.98rem;
+  color: var(--status);
+  font-weight: 600;
+  text-align: center;
+}
+
+#chatOnly {
+  border-radius: 14px;
+  border: 1px solid var(--panel-border);
+  background: rgba(0,0,0,0.35);
+  padding: 13px;
+}
+
+#messagesChat {
+  min-height: 300px;
+  max-height: 400px;
+  overflow-y: auto;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 12px;
+  background: rgba(255,255,255,0.07);
+}
+
+#infoChat {
+  border-radius: 16px;
+  border: 1px solid var(--panel-border);
+  background: rgba(0,0,0,0.45);
+  padding: 18px;
+  min-height: 200px;
 }

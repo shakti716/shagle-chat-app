@@ -13,7 +13,14 @@
       <h1>umingle</h1>
       <button id="themeToggle" aria-label="Toggle light/dark mode">Dark mode</button>
     </div>
-    <div id="appGrid">
+    <div id="selectionScreen">
+      <h2>Choose your experience</h2>
+      <div class="optionButtons">
+        <button id="chatOnlyBtn">💬 Chat Only</button>
+        <button id="videoCallBtn">📹 Video Call</button>
+      </div>
+    </div>
+    <div id="appGrid" style="display: none;">
       <section id="videoLeft">
         <div id="video-stage">
           <div class="videoCard videoBig">
@@ -36,7 +43,6 @@
             <button id="sendButton" disabled>Send</button>
           </div>
           <div class="controls buttons">
-            <button id="videoButton" style="display: none;">📹 Video</button>
             <button id="muteButton" style="display: none;">🔇 Mute</button>
             <button id="nextButton" style="display: none;">🔄 Next</button>
             <button id="reportButton" style="display: none;">🚨 Report</button>
@@ -47,6 +53,31 @@
           <p class="notice">🔞 You must be 18+ • No nudity, hate or harassment • Your webcam must show you, live • Do not ask gender • Violators banned</p>
           <ul class="rules">
             <li>Live webcam only; no avatars.</li>
+            <li>Keep it friendly and polite.</li>
+            <li>Report bad behavior immediately.</li>
+            <li>Stay safe, stay anonymous.</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+    <div id="chatOnlyGrid" style="display: none;">
+      <aside id="chatOnlyRight">
+        <div id="statusChat">Finding someone to chat with...</div>
+        <div id="chatOnly">
+          <div id="messagesChat"></div>
+          <div class="controls">
+            <input type="text" id="messageInputChat" placeholder="Type your message..." disabled>
+            <button id="sendButtonChat" disabled>Send</button>
+          </div>
+          <div class="controls buttons">
+            <button id="nextButtonChat" style="display: none;">🔄 Next</button>
+            <button id="reportButtonChat" style="display: none;">🚨 Report</button>
+          </div>
+        </div>
+        <div id="infoChat">
+          <h2>Welcome to Shagle.</h2>
+          <p class="notice">🔞 You must be 18+ • No nudity, hate or harassment • Your webcam must show you, live • Do not ask gender • Violators banned</p>
+          <ul class="rules">
             <li>Keep it friendly and polite.</li>
             <li>Report bad behavior immediately.</li>
             <li>Stay safe, stay anonymous.</li>
