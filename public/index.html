@@ -16,6 +16,7 @@
       <div id="videos">
         <video id="localVideo" autoplay muted></video>
         <video id="remoteVideo" autoplay></video>
+        <button id="minimizeVideo" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; display: none;">✕</button>
       </div>
       <div id="messages"></div>
       <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
@@ -23,7 +24,8 @@
         <button id="sendButton" disabled>Send</button>
       </div>
       <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 10px;">
-        <button id="videoButton" style="display: none;">📹 Start Video</button>
+        <button id="videoButton" style="display: none;">📹 Video Call</button>
+        <button id="voiceButton" style="display: none;">📞 Voice Call</button>
         <button id="muteButton" style="display: none;">🔇 Mute</button>
         <button id="nextButton" style="display: none;">🔄 Next Chat</button>
         <button id="reportButton" style="display: none;">🚨 Report</button>

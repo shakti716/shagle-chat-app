@@ -30,6 +30,7 @@ socket.on('chatStart', () => {
   nextButton.style.display = 'inline-block';
   reportButton.style.display = 'inline-block';
   videoButton.style.display = 'inline-block';
+  voiceButton.style.display = 'inline-block';
   muteButton.style.display = 'none';
   muteButton.textContent = '🔇 Mute';
   messages.innerHTML = '';
