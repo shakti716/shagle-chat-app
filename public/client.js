@@ -11,10 +11,12 @@ const sendButton = document.getElementById('sendButton');
 const nextButton = document.getElementById('nextButton');
 const reportButton = document.getElementById('reportButton');
 const videoButton = document.getElementById('videoButton');
+const muteButton = document.getElementById('muteButton');
 
 let peerConnection;
 let localStream;
 let isInitiator = false;
+let isMuted = false;
 
 socket.on('connect', () => {
   status.textContent = 'Waiting for a stranger...';
@@ -28,6 +30,8 @@ socket.on('chatStart', () => {
   nextButton.style.display = 'inline-block';
   reportButton.style.display = 'inline-block';
   videoButton.style.display = 'inline-block';
+  muteButton.style.display = 'none';
+  muteButton.textContent = '🔇 Mute';
   messages.innerHTML = '';
   addMessage('You are now connected to a stranger. Say hi!', 'system');
 });
@@ -90,6 +94,7 @@ nextButton.addEventListener('click', () => {
   nextButton.style.display = 'none';
   reportButton.style.display = 'none';
   videoButton.style.display = 'none';
+  muteButton.style.display = 'none';
   videos.style.display = 'none';
   closeVideoCall();
 });
@@ -126,11 +131,21 @@ videoButton.addEventListener('click', async () => {
     await prepareVideoCall();
     socket.emit('videoRequest');
     videoButton.disabled = true;
+    muteButton.style.display = 'inline-block';
+    muteButton.textContent = '🔇 Mute';
+    isMuted = false;
     addMessage('Video call request sent. Waiting for partner...', 'system');
   } catch (error) {
     console.error('Error starting video request', error);
     alert('Unable to start video. Check your camera/microphone permissions.');
   }
+});
+
+muteButton.addEventListener('click', () => {
+  if (!localStream) return;
+  isMuted = !isMuted;
+  localStream.getAudioTracks().forEach(track => track.enabled = !isMuted);
+  muteButton.textContent = isMuted ? '🔈 Unmute' : '🔇 Mute';
 });
 
 async function prepareVideoCall() {
@@ -177,6 +192,8 @@ socket.on('videoReady', async () => {
     await peerConnection.setLocalDescription(offer);
     socket.emit('offer', offer);
     videos.style.display = 'block';
+    muteButton.style.display = 'inline-block';
+    muteButton.textContent = isMuted ? '🔈 Unmute' : '🔇 Mute';
   } catch (error) {
     console.error('Error sending offer', error);
   }
@@ -192,6 +209,8 @@ socket.on('offer', async (offer) => {
     await peerConnection.setLocalDescription(answer);
     socket.emit('answer', answer);
     videos.style.display = 'block';
+    muteButton.style.display = 'inline-block';
+    muteButton.textContent = isMuted ? '🔈 Unmute' : '🔇 Mute';
   } catch (error) {
     console.error('Error handling offer', error);
   }
@@ -229,5 +248,6 @@ function closeVideoCall() {
   remoteVideo.srcObject = null;
   videoButton.style.display = 'inline-block';
   videoButton.disabled = false;
+  muteButton.style.display = 'none';
   videos.style.display = 'none';
 }
