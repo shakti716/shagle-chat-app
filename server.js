@@ -39,8 +39,9 @@ function tryPair() {
     io.sockets.sockets.get(user1.id).join(room);
     io.sockets.sockets.get(user2.id).join(room);
 
-    // Notify both users that they are connected
-    io.to(room).emit('chatStart');
+    // Notify both users that they are connected as chat mode
+    io.to(user1.id).emit('chatStart', { mode: 'chat' });
+    io.to(user2.id).emit('chatStart', { mode: 'chat' });
   }
 
   // Pair video users
@@ -60,8 +61,9 @@ function tryPair() {
     io.sockets.sockets.get(user1.id).join(room);
     io.sockets.sockets.get(user2.id).join(room);
 
-    // Notify both users that they are connected
-    io.to(room).emit('chatStart');
+    // Notify both users that they are connected (video mode). One initiator, one responder.
+    io.to(user1.id).emit('chatStart', { mode: 'video', isInitiator: true });
+    io.to(user2.id).emit('chatStart', { mode: 'video', isInitiator: false });
   }
 }
 

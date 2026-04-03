@@ -72,8 +72,10 @@ socket.on('connect', () => {
   status.textContent = 'Waiting for a stranger...';
 });
 
-socket.on('chatStart', () => {
-  if (isChatOnly) {
+socket.on('chatStart', (data) => {
+  const mode = data?.mode || 'chat';
+  const isInitiator = data?.isInitiator || false;
+  if (mode === 'chat' || isChatOnly) {
     statusChat.style.display = 'none';
     chatOnly.style.display = 'block';
     messageInputChat.disabled = false;
@@ -94,17 +96,19 @@ socket.on('chatStart', () => {
     isMuted = false;
     messages.innerHTML = '';
     addMessage('You are now connected to a stranger. Say hi!', 'system', false);
+
     // Start video immediately for video call mode
-    prepareVideoCall().then(() => {
+    prepareVideoCall().then(async () => {
       if (videoStage) videoStage.style.display = 'block';
-      // Initiate WebRTC offer
-      peerConnection.createOffer().then(offer => {
-        return peerConnection.setLocalDescription(offer);
-      }).then(() => {
-        socket.emit('offer', peerConnection.localDescription);
-      }).catch(error => {
-        console.error('Error creating offer', error);
-      });
+      if (isInitiator) {
+        try {
+          const offer = await peerConnection.createOffer();
+          await peerConnection.setLocalDescription(offer);
+          socket.emit('offer', peerConnection.localDescription);
+        } catch (error) {
+          console.error('Error creating offer', error);
+        }
+      }
     }).catch(error => {
       console.error('Error starting video', error);
     });
@@ -354,12 +358,12 @@ function reportUser(chatOnly = false) {
 function setTheme(theme) {
   document.body.classList.remove('light-theme', 'dark-theme');
   document.body.classList.add(theme);
-  localStorage.setItem('umingleTheme', theme);
+  localStorage.setItem('shagleTheme', theme);
   const toggle = document.getElementById('themeToggle');
   toggle.textContent = theme === 'dark-theme' ? 'Light mode' : 'Dark mode';
 }
 
-const savedTheme = localStorage.getItem('umingleTheme') || 'dark-theme';
+const savedTheme = localStorage.getItem('shagleTheme') || 'dark-theme';
 setTheme(savedTheme);
 
 const themeToggle = document.getElementById('themeToggle');
