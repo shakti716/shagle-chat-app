@@ -9,27 +9,50 @@
 </head>
 <body>
   <div id="container">
-    <h1>Shagle</h1>
-    <p style="color: #7f8c8d; font-size: 0.9em; margin: -10px 0 20px;">Connect with strangers worldwide</p>
-    <div id="status">Finding someone to chat with...</div>
-    <div id="chat">
-      <div id="videos">
-        <video id="localVideo" autoplay muted></video>
-        <video id="remoteVideo" autoplay></video>
-        <button id="minimizeVideo" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; display: none;">✕</button>
-      </div>
-      <div id="messages"></div>
-      <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap;">
-        <input type="text" id="messageInput" placeholder="Type your message..." disabled>
-        <button id="sendButton" disabled>Send</button>
-      </div>
-      <div style="display: flex; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 10px;">
-        <button id="videoButton" style="display: none;">📹 Video Call</button>
-        <button id="voiceButton" style="display: none;">📞 Voice Call</button>
-        <button id="muteButton" style="display: none;">🔇 Mute</button>
-        <button id="nextButton" style="display: none;">🔄 Next Chat</button>
-        <button id="reportButton" style="display: none;">🚨 Report</button>
-      </div>
+    <div id="topBar">
+      <h1>umingle</h1>
+      <button id="themeToggle" aria-label="Toggle light/dark mode">Dark mode</button>
+    </div>
+    <div id="appGrid">
+      <section id="videoLeft">
+        <div id="video-stage">
+          <div id="videoTiles">
+            <div class="videoCard">
+              <video id="remoteVideo" autoplay playsinline></video>
+              <div class="videoTag">Stranger</div>
+            </div>
+            <div class="videoCard">
+              <video id="localVideo" autoplay muted playsinline></video>
+              <div class="videoTag">You</div>
+            </div>
+          </div>
+          <button id="minimizeVideo" class="smallBtn" title="Stop video" style="display: none;">✕</button>
+        </div>
+        <div id="status">Finding someone to chat with...</div>
+        <div id="chat">
+          <div id="messages"></div>
+          <div class="controls">
+            <input type="text" id="messageInput" placeholder="Type your message..." disabled>
+            <button id="sendButton" disabled>Send</button>
+          </div>
+          <div class="controls buttons">
+            <button id="videoButton" style="display: none;">📹 Video</button>
+            <button id="muteButton" style="display: none;">🔇 Mute</button>
+            <button id="nextButton" style="display: none;">🔄 Next</button>
+            <button id="reportButton" style="display: none;">🚨 Report</button>
+          </div>
+        </div>
+      </section>
+      <aside id="infoRight">
+        <h2>Welcome to Umingle.</h2>
+        <p class="notice">🔞 You must be 18+ • No nudity, hate or harassment • Your webcam must show you, live • Do not ask gender • Violators banned</p>
+        <ul class="rules">
+          <li>Live webcam only; no avatars.</li>
+          <li>Keep it friendly and polite.</li>
+          <li>Report bad behavior immediately.</li>
+          <li>Stay safe, stay anonymous.</li>
+        </ul>
+      </aside>
     </div>
   </div>
   <script src="/socket.io/socket.io.js"></script>

@@ -252,3 +252,22 @@ function closeVideoCall() {
   muteButton.style.display = 'none';
   videos.style.display = 'none';
 }
+
+function setTheme(theme) {
+  document.body.classList.remove('light-theme', 'dark-theme');
+  document.body.classList.add(theme);
+  localStorage.setItem('umingleTheme', theme);
+  const toggle = document.getElementById('themeToggle');
+  toggle.textContent = theme === 'dark-theme' ? 'Light mode' : 'Dark mode';
+}
+
+const savedTheme = localStorage.getItem('umingleTheme') || 'dark-theme';
+setTheme(savedTheme);
+
+const themeToggle = document.getElementById('themeToggle');
+if (themeToggle) {
+  themeToggle.addEventListener('click', () => {
+    const current = document.body.classList.contains('dark-theme') ? 'dark-theme' : 'light-theme';
+    setTheme(current === 'dark-theme' ? 'light-theme' : 'dark-theme');
+  });
+}
