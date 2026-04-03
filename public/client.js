@@ -30,13 +30,31 @@ let isInitiator = false;
 let isMuted = false;
 let isChatOnly = false;
 
+const backButton = document.getElementById('backButton');
 const chatOnlyBtn = document.getElementById('chatOnlyBtn');
 const videoCallBtn = document.getElementById('videoCallBtn');
+
+function returnToSelection() {
+  selectionScreen.style.display = 'block';
+  appGrid.style.display = 'none';
+  chatOnlyGrid.style.display = 'none';
+  backButton.style.display = 'none';
+  status.textContent = 'Waiting for a stranger...';
+  statusChat.textContent = 'Waiting for a stranger...';
+  messageInput.disabled = true;
+  sendButton.disabled = true;
+  messageInputChat.disabled = true;
+  sendButtonChat.disabled = true;
+  socket.emit('nextChat');
+}
+
+backButton.addEventListener('click', returnToSelection);
 
 chatOnlyBtn.addEventListener('click', () => {
   isChatOnly = true;
   selectionScreen.style.display = 'none';
   chatOnlyGrid.style.display = 'block';
+  backButton.style.display = 'inline-block';
   socket.emit('ready', { mode: 'chat' });
   nextButtonChat.style.display = 'inline-block';
 });
@@ -45,6 +63,7 @@ videoCallBtn.addEventListener('click', () => {
   isChatOnly = false;
   selectionScreen.style.display = 'none';
   appGrid.style.display = 'block';
+  backButton.style.display = 'inline-block';
   socket.emit('ready', { mode: 'video' });
   nextButton.style.display = 'inline-block';
 });

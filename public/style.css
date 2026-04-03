@@ -69,6 +69,28 @@ body {
   margin-bottom: 16px;
 }
 
+.top-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.back-btn {
+  border: 1px solid var(--panel-border);
+  background: rgba(255,255,255,0.12);
+  color: var(--text);
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.back-btn:hover {
+  background: rgba(255,255,255,0.2);
+}
+
+
 #topBar h1 {
   margin: 0;
   font-size: 2.2rem;
