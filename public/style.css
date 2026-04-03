@@ -133,7 +133,8 @@ body {
   background: rgba(2, 5, 20, 0.55);
   border: 1px solid var(--panel-border);
   padding: 12px;
-  min-height: 340px;
+  min-height: 280px;
+  max-height: 320px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -147,18 +148,19 @@ body {
   background: #000;
   display: flex;
   overflow: hidden;
+  min-height: 240px;
 }
 
 .videoBig {
-  flex: 2;
-  min-height: 320px;
+  flex: 1.4;
+  min-width: 60%;
 }
 
 .videoSmall {
-  flex: 1;
-  max-width: 280px;
-  min-width: 180px;
-  min-height: 200px;
+  flex: 0.8;
+  max-width: 220px;
+  min-width: 160px;
+  min-height: 160px;
 }
 
 
