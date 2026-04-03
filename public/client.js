@@ -2,7 +2,7 @@ const socket = io();
 
 const status = document.getElementById('status');
 const chat = document.getElementById('chat');
-const videos = document.getElementById('videos');
+const videoStage = document.getElementById('video-stage');
 const localVideo = document.getElementById('localVideo');
 const remoteVideo = document.getElementById('remoteVideo');
 const messages = document.getElementById('messages');
@@ -30,7 +30,6 @@ socket.on('chatStart', () => {
   nextButton.style.display = 'inline-block';
   reportButton.style.display = 'inline-block';
   videoButton.style.display = 'inline-block';
-  voiceButton.style.display = 'inline-block';
   muteButton.style.display = 'none';
   muteButton.textContent = '🔇 Mute';
   messages.innerHTML = '';
@@ -48,7 +47,7 @@ socket.on('partnerDisconnected', () => {
   nextButton.style.display = 'none';
   reportButton.style.display = 'none';
   videoButton.style.display = 'none';
-  videos.style.display = 'none';
+  if (videoStage) videoStage.style.display = 'none';
   closeVideoCall();
   setTimeout(() => {
     status.style.display = 'block';
@@ -96,19 +95,7 @@ nextButton.addEventListener('click', () => {
   reportButton.style.display = 'none';
   videoButton.style.display = 'none';
   muteButton.style.display = 'none';
-  videos.style.display = 'none';
-  closeVideoCall();
-});
-
-reportButton.addEventListener('click', () => {
-  socket.emit('report');
-  addMessage('You reported the user. Disconnecting...', 'system');
-  messageInput.disabled = true;
-  sendButton.disabled = true;
-  nextButton.style.display = 'none';
-  reportButton.style.display = 'none';
-  videoButton.style.display = 'none';
-  videos.style.display = 'none';
+  if (videoStage) videoStage.style.display = 'none';
   closeVideoCall();
   setTimeout(() => {
     status.style.display = 'block';
@@ -167,7 +154,7 @@ async function prepareVideoCall() {
 
     peerConnection.ontrack = event => {
       remoteVideo.srcObject = event.streams[0];
-      videos.style.display = 'block';
+      if (videoStage) videoStage.style.display = 'block';
     };
 
     peerConnection.onicecandidate = event => {
@@ -192,7 +179,7 @@ socket.on('videoReady', async () => {
     const offer = await peerConnection.createOffer();
     await peerConnection.setLocalDescription(offer);
     socket.emit('offer', offer);
-    videos.style.display = 'block';
+    if (videoStage) videoStage.style.display = 'block';
     muteButton.style.display = 'inline-block';
     muteButton.textContent = isMuted ? '🔈 Unmute' : '🔇 Mute';
   } catch (error) {
@@ -209,7 +196,7 @@ socket.on('offer', async (offer) => {
     const answer = await peerConnection.createAnswer();
     await peerConnection.setLocalDescription(answer);
     socket.emit('answer', answer);
-    videos.style.display = 'block';
+    if (videoStage) videoStage.style.display = 'block';
     muteButton.style.display = 'inline-block';
     muteButton.textContent = isMuted ? '🔈 Unmute' : '🔇 Mute';
   } catch (error) {
@@ -250,7 +237,7 @@ function closeVideoCall() {
   videoButton.style.display = 'inline-block';
   videoButton.disabled = false;
   muteButton.style.display = 'none';
-  videos.style.display = 'none';
+  if (videoStage) videoStage.style.display = 'none';
 }
 
 function setTheme(theme) {
