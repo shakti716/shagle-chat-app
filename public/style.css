@@ -110,31 +110,24 @@ body {
   border-radius: 16px;
   background: rgba(2, 5, 20, 0.55);
   border: 1px solid var(--panel-border);
-  padding: 0;
-  min-height: 460px;
-  overflow: hidden;
+  padding: 12px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .videoCard {
-  position: absolute;
+  position: relative;
   border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.12);
   background: #000;
+  flex: 1;
+  min-height: 140px;
 }
 
-.videoBig {
-  top: 0;
-  right: 0;
-  left: 0;
-  bottom: 0;
-}
-
-.videoSmall {
-  width: 180px;
-  height: 140px;
-  bottom: 14px;
-  right: 14px;
-  z-index: 3;
+.videoBig, .videoSmall {
+  flex: 1;
 }
 
 .videoCard video {

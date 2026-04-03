@@ -37,14 +37,16 @@ chatOnlyBtn.addEventListener('click', () => {
   isChatOnly = true;
   selectionScreen.style.display = 'none';
   chatOnlyGrid.style.display = 'block';
-  socket.emit('ready');
+  socket.emit('ready', { mode: 'chat' });
+  nextButtonChat.style.display = 'inline-block';
 });
 
 videoCallBtn.addEventListener('click', () => {
   isChatOnly = false;
   selectionScreen.style.display = 'none';
   appGrid.style.display = 'block';
-  socket.emit('ready');
+  socket.emit('ready', { mode: 'video' });
+  nextButton.style.display = 'inline-block';
 });
 
 socket.on('connect', () => {
@@ -99,13 +101,11 @@ socket.on('partnerDisconnected', () => {
     addMessage('Stranger has disconnected.', 'system', true);
     messageInputChat.disabled = true;
     sendButtonChat.disabled = true;
-    nextButtonChat.style.display = 'none';
     reportButtonChat.style.display = 'none';
   } else {
     addMessage('Stranger has disconnected.', 'system', false);
     messageInput.disabled = true;
     sendButton.disabled = true;
-    nextButton.style.display = 'none';
     reportButton.style.display = 'none';
     if (videoStage) videoStage.style.display = 'none';
     closeVideoCall();
@@ -278,7 +278,6 @@ function nextChat(chatOnly = false) {
     chatOnly.style.display = 'none';
     messageInputChat.disabled = true;
     sendButtonChat.disabled = true;
-    nextButtonChat.style.display = 'none';
     reportButtonChat.style.display = 'none';
   } else {
     status.style.display = 'block';
@@ -286,7 +285,6 @@ function nextChat(chatOnly = false) {
     chat.style.display = 'none';
     messageInput.disabled = true;
     sendButton.disabled = true;
-    nextButton.style.display = 'none';
     reportButton.style.display = 'none';
     muteButton.style.display = 'none';
     if (videoStage) videoStage.style.display = 'none';
@@ -302,7 +300,7 @@ function nextChat(chatOnly = false) {
       status.textContent = 'Waiting for a stranger...';
       chat.style.display = 'none';
     }
-    socket.emit('ready');
+    socket.emit('ready', { mode: chatOnly ? 'chat' : 'video' });
   }, 2000);
 }
 
@@ -312,12 +310,10 @@ function reportUser(chatOnly = false) {
   if (chatOnly) {
     messageInputChat.disabled = true;
     sendButtonChat.disabled = true;
-    nextButtonChat.style.display = 'none';
     reportButtonChat.style.display = 'none';
   } else {
     messageInput.disabled = true;
     sendButton.disabled = true;
-    nextButton.style.display = 'none';
     reportButton.style.display = 'none';
     if (videoStage) videoStage.style.display = 'none';
     closeVideoCall();
@@ -332,6 +328,7 @@ function reportUser(chatOnly = false) {
       status.textContent = 'Waiting for a stranger...';
       chat.style.display = 'none';
     }
+    socket.emit('ready', { mode: chatOnly ? 'chat' : 'video' });
   }, 2000);
 }
 
