@@ -3,96 +3,31 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shagle - Random Video Chat</title>
+  <title>Shagle - Random Chat</title>
   <link rel="stylesheet" href="style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💬</text></svg>">
 </head>
 <body>
-  <div id="container">
-    <div id="topBar">
-      <div class="top-left">
-        <div class="logoBadge">
-          <div class="logoIcon">S</div>
-          <span>shagle</span>
-        </div>
-      </div>
-      <div class="top-right">
-        <div id="onlineCount">12,165+ online</div>
-      </div>
+  <div class="app">
+    <header>
+      <h1>Shagle</h1>
+      <p>Random anonymous chat with strangers</p>
+    </header>
+
+    <div id="status">Connecting to a stranger...</div>
+
+    <div id="messages"></div>
+
+    <div class="input-row">
+      <input id="messageInput" type="text" placeholder="Type your message..." disabled>
+      <button id="sendButton" disabled>Send</button>
     </div>
-    <div id="selectionScreen">
-      <h2>Choose your experience</h2>
-      <div class="optionButtons">
-        <button id="chatOnlyBtn">💬 Chat Only</button>
-        <button id="videoCallBtn">📹 Video Call</button>
-      </div>
-    </div>
-    <div id="appGrid" style="display: none;">
-      <section id="videoLeft">
-        <div id="video-stage">
-          <div class="videoCard videoBig">
-            <video id="remoteVideo" autoplay playsinline></video>
-            <div class="videoTag">Stranger</div>
-          </div>
-          <div class="videoCard videoSmall">
-            <video id="localVideo" autoplay muted playsinline></video>
-            <div class="videoTag">You</div>
-          </div>
-          <button id="minimizeVideo" class="smallBtn" title="Stop video" style="display: none;">✕</button>
-        </div>
-      </section>
-      <aside id="chartRight">
-        <div id="status">Finding someone to chat with...</div>
-        <div id="chat">
-          <div id="messages"></div>
-          <div class="controls">
-            <input type="text" id="messageInput" placeholder="Type your message..." disabled>
-            <button id="sendButton" disabled>Send</button>
-          </div>
-          <div class="controls buttons">
-            <button id="muteButton" style="display: none;">🔇 Mute</button>
-            <button id="nextButton">🔄 Next</button>
-            <button id="reportButton" style="display: none;">🚨 Report</button>
-          </div>
-        </div>
-        <div id="infoRight">
-          <h2>Welcome to Shagle.</h2>
-          <p class="notice">🔞 You must be 18+ • No nudity, hate or harassment • Your webcam must show you, live • Do not ask gender • Violators banned</p>
-          <ul class="rules">
-            <li>Live webcam only; no avatars.</li>
-            <li>Keep it friendly and polite.</li>
-            <li>Report bad behavior immediately.</li>
-            <li>Stay safe, stay anonymous.</li>
-          </ul>
-        </div>
-      </aside>
-    </div>
-    <div id="chatOnlyGrid" style="display: none;">
-      <aside id="chatOnlyRight">
-        <div id="statusChat">Finding someone to chat with...</div>
-        <div id="chatOnly">
-          <div id="messagesChat"></div>
-          <div class="controls">
-            <input type="text" id="messageInputChat" placeholder="Type your message..." disabled>
-            <button id="sendButtonChat" disabled>Send</button>
-          </div>
-          <div class="controls buttons">
-            <button id="nextButtonChat">🔄 Next</button>
-            <button id="reportButtonChat" style="display: none;">🚨 Report</button>
-          </div>
-        </div>
-        <div id="infoChat">
-          <h2>Welcome to Shagle.</h2>
-          <p class="notice">🔞 You must be 18+ • No nudity, hate or harassment • Your webcam must show you, live • Do not ask gender • Violators banned</p>
-          <ul class="rules">
-            <li>Keep it friendly and polite.</li>
-            <li>Report bad behavior immediately.</li>
-            <li>Stay safe, stay anonymous.</li>
-          </ul>
-        </div>
-      </aside>
+
+    <div class="actions">
+      <button id="nextButton">Next Chat</button>
+      <button id="reportButton">Report</button>
     </div>
   </div>
+
   <script src="/socket.io/socket.io.js"></script>
   <script src="client.js"></script>
 </body>
