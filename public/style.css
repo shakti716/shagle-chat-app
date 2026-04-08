@@ -66,13 +66,47 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
 }
 
 .top-left {
   display: flex;
   align-items: center;
+  gap: 12px;
+}
+
+.logoBadge {
+  display: flex;
+  align-items: center;
   gap: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: lowercase;
+}
+
+.logoIcon {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #7c52ff, #6df3ff);
+  color: #0a1220;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 1.2rem;
+}
+
+.top-right {
+  color: var(--text);
+  font-weight: 600;
+  font-size: 0.95rem;
+  background: rgba(255,255,255,0.06);
+  padding: 10px 16px;
+  border-radius: 14px;
 }
 
 .back-btn {
@@ -132,35 +166,36 @@ body {
   border-radius: 16px;
   background: rgba(2, 5, 20, 0.55);
   border: 1px solid var(--panel-border);
-  padding: 12px;
-  min-height: 280px;
-  max-height: 320px;
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  gap: 10px;
+  padding: 14px;
+  min-height: 400px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto minmax(180px, 220px);
+  gap: 14px;
 }
 
 .videoCard {
   position: relative;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.16);
   background: #000;
-  display: flex;
   overflow: hidden;
-  min-height: 240px;
 }
 
 .videoBig {
-  flex: 1.4;
-  min-width: 60%;
+  min-height: 320px;
 }
 
 .videoSmall {
-  flex: 0.8;
-  max-width: 220px;
+  width: 45%;
   min-width: 160px;
-  min-height: 160px;
+  max-width: 260px;
+  min-height: 180px;
+  margin: 0 auto;
+}
+
+#video-stage .videoCard.videoSmall {
+  justify-self: center;
 }
 
 
