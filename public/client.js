@@ -15,15 +15,21 @@ let peer = null;
 let localStream = null;
 let cameraEnabled = true;
 let micEnabled = true;
+let isInitiator = false;
 
 // Initialize local video stream
 async function initializeVideo() {
   try {
+    if (localStream) {
+      return; // Stream already initialized
+    }
     localStream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 1280 }, height: { ideal: 720 } },
       audio: true
     });
-    localVideo.srcObject = localStream;
+    if (localVideo) {
+      localVideo.srcObject = localStream;
+    }
   } catch (err) {
     console.error('Error accessing media devices:', err);
     addMessage('Unable to access camera/microphone. Please check permissions.', 'system');
@@ -34,30 +40,47 @@ async function initializeVideo() {
 function initiatePeerConnection(initiator) {
   if (peer) {
     peer.destroy();
+    peer = null;
   }
 
-  peer = new SimplePeer({
+  isInitiator = initiator;
+
+  const peerConfig = {
     initiator: initiator,
-    stream: localStream,
+    trickleIce: true,
     config: {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' }
+        { urls: 'stun:stun1.l.google.com:19302' },
+        { urls: 'stun:stun2.l.google.com:19302' }
       ]
     }
-  });
+  };
+
+  if (localStream) {
+    peerConfig.streams = [localStream];
+  }
+
+  peer = new SimplePeer(peerConfig);
 
   peer.on('signal', (data) => {
+    console.log('Signal event:', data.type || 'ice-candidate');
     if (data.type === 'offer') {
       socket.emit('webrtc-offer', data);
     } else if (data.type === 'answer') {
       socket.emit('webrtc-answer', data);
-    } else if (data.candidate) {
+    } else {
       socket.emit('webrtc-ice-candidate', data);
     }
   });
 
+  peer.on('connect', () => {
+    console.log('Peer connection established');
+    status.textContent = 'Connected. Video call active!';
+  });
+
   peer.on('stream', (stream) => {
+    console.log('Remote stream received');
     remoteVideo.srcObject = stream;
   });
 
@@ -66,28 +89,19 @@ function initiatePeerConnection(initiator) {
   });
 
   peer.on('close', () => {
+    console.log('Peer connection closed');
     remoteVideo.srcObject = null;
   });
 }
 
-// Stop and clean up video
+// Stop and clean up video peer connection only
 function stopVideo() {
-  if (localStream) {
-    localStream.getTracks().forEach(track => track.stop());
-    localStream = null;
-  }
   if (peer) {
     peer.destroy();
     peer = null;
   }
-  localVideo.srcObject = null;
   remoteVideo.srcObject = null;
-  cameraEnabled = true;
-  micEnabled = true;
-  cameraToggle.textContent = '📷 Camera ON';
-  micToggle.textContent = '🎤 Mic ON';
-  cameraToggle.classList.remove('off');
-  micToggle.classList.remove('off');
+  isInitiator = false;
 }
 
 // Toggle camera
@@ -110,14 +124,15 @@ micToggle.addEventListener('click', () => {
   }
 });
 
-// Socket events
 socket.on('connect', () => {
+  console.log('Socket connected');
   status.textContent = 'Waiting for a stranger...';
   initializeVideo();
   socket.emit('ready');
 });
 
 socket.on('chatStart', () => {
+  console.log('Chat started');
   status.textContent = 'Connected. Starting video call...';
   messageInput.disabled = false;
   sendButton.disabled = false;
@@ -126,18 +141,24 @@ socket.on('chatStart', () => {
   messages.innerHTML = '';
   addMessage('You are now connected to a stranger. Say hi!', 'system');
   
-  // Initiate peer connection (this user is the initiator)
-  initiatePeerConnection(true);
+  // Initiate peer connection (first user is the initiator)
+  setTimeout(() => {
+    initiatePeerConnection(true);
+  }, 100);
 });
 
 socket.on('webrtc-offer', (offer) => {
+  console.log('Received offer');
   if (!peer) {
     initiatePeerConnection(false);
   }
-  peer.signal(offer);
+  if (peer) {
+    peer.signal(offer);
+  }
 });
 
 socket.on('webrtc-answer', (answer) => {
+  console.log('Received answer');
   if (peer) {
     peer.signal(answer);
   }
@@ -154,6 +175,7 @@ socket.on('message', (text) => {
 });
 
 socket.on('partnerDisconnected', () => {
+  console.log('Partner disconnected');
   addMessage('Stranger disconnected.', 'system');
   messageInput.disabled = true;
   sendButton.disabled = true;
@@ -161,10 +183,13 @@ socket.on('partnerDisconnected', () => {
   reportButton.style.display = 'none';
   stopVideo();
   status.textContent = 'Waiting for a stranger...';
-  socket.emit('ready');
+  setTimeout(() => {
+    socket.emit('ready');
+  }, 500);
 });
 
 socket.on('waiting', () => {
+  console.log('Waiting for stranger');
   status.textContent = 'Waiting for a stranger...';
   stopVideo();
 });
@@ -219,5 +244,10 @@ function addMessage(text, type) {
 
 // Cleanup on page unload
 window.addEventListener('beforeunload', () => {
-  stopVideo();
+  if (localStream) {
+    localStream.getTracks().forEach(track => track.stop());
+  }
+  if (peer) {
+    peer.destroy();
+  }
 });
