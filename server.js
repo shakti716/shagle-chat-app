@@ -45,6 +45,28 @@ io.on('connection', (socket) => {
     }
   });
 
+  // WebRTC signaling
+  socket.on('webrtc-offer', (offer) => {
+    const chatInfo = activeChats.get(socket.id);
+    if (chatInfo) {
+      socket.to(chatInfo.room).emit('webrtc-offer', offer);
+    }
+  });
+
+  socket.on('webrtc-answer', (answer) => {
+    const chatInfo = activeChats.get(socket.id);
+    if (chatInfo) {
+      socket.to(chatInfo.room).emit('webrtc-answer', answer);
+    }
+  });
+
+  socket.on('webrtc-ice-candidate', (candidate) => {
+    const chatInfo = activeChats.get(socket.id);
+    if (chatInfo) {
+      socket.to(chatInfo.room).emit('webrtc-ice-candidate', candidate);
+    }
+  });
+
   socket.on('report', () => {
     const chatInfo = activeChats.get(socket.id);
     if (chatInfo) {

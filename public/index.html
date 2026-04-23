@@ -10,16 +10,36 @@
   <div class="app">
     <header>
       <h1>Shagle</h1>
-      <p>Random anonymous chat with strangers</p>
+      <p>Random anonymous chat & video with strangers</p>
     </header>
 
     <div id="status">Connecting to a stranger...</div>
 
-    <div id="messages"></div>
+    <div class="chat-video-container">
+      <!-- Video Section -->
+      <div class="video-section">
+        <div class="video-wrapper">
+          <video id="localVideo" autoplay muted playsinline></video>
+          <div class="video-label local-label">You</div>
+        </div>
+        <div class="video-wrapper">
+          <video id="remoteVideo" autoplay playsinline></video>
+          <div class="video-label remote-label">Stranger</div>
+        </div>
+        <div class="video-controls">
+          <button id="cameraToggle" class="control-btn">📷 Camera ON</button>
+          <button id="micToggle" class="control-btn">🎤 Mic ON</button>
+        </div>
+      </div>
 
-    <div class="input-row">
-      <input id="messageInput" type="text" placeholder="Type your message..." disabled>
-      <button id="sendButton" disabled>Send</button>
+      <!-- Chat Section -->
+      <div class="chat-section">
+        <div id="messages"></div>
+        <div class="input-row">
+          <input id="messageInput" type="text" placeholder="Type your message..." disabled>
+          <button id="sendButton" disabled>Send</button>
+        </div>
+      </div>
     </div>
 
     <div class="actions">
@@ -29,6 +49,7 @@
   </div>
 
   <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/simple-peer@9.11.1/simplepeer.min.js"></script>
   <script src="client.js"></script>
 </body>
 </html>
