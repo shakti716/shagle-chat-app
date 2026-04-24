@@ -47,7 +47,7 @@ function initiatePeerConnection(initiator) {
 
   const peerConfig = {
     initiator: initiator,
-    trickleIce: true,
+    trickle: true,
     config: {
       iceServers: [
         { urls: 'stun:stun.l.google.com:19302' },
@@ -58,7 +58,7 @@ function initiatePeerConnection(initiator) {
   };
 
   if (localStream) {
-    peerConfig.streams = [localStream];
+    peerConfig.stream = localStream;
   }
 
   peer = new SimplePeer(peerConfig);
@@ -82,6 +82,11 @@ function initiatePeerConnection(initiator) {
   peer.on('stream', (stream) => {
     console.log('Remote stream received');
     remoteVideo.srcObject = stream;
+    if (remoteVideo.paused) {
+      remoteVideo.play().catch((err) => {
+        console.warn('Unable to autoplay remote video:', err);
+      });
+    }
   });
 
   peer.on('error', (err) => {
