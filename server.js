@@ -27,7 +27,8 @@ function tryPair() {
     if (socket1 && socket2) {
       socket1.join(room);
       socket2.join(room);
-      io.to(room).emit('chatStart');
+      socket1.emit('chatStart', { initiator: true });
+      socket2.emit('chatStart', { initiator: false });
     }
   }
 }

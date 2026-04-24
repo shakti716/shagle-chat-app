@@ -124,15 +124,15 @@ micToggle.addEventListener('click', () => {
   }
 });
 
-socket.on('connect', () => {
+socket.on('connect', async () => {
   console.log('Socket connected');
   status.textContent = 'Waiting for a stranger...';
-  initializeVideo();
+  await initializeVideo();
   socket.emit('ready');
 });
 
-socket.on('chatStart', () => {
-  console.log('Chat started');
+socket.on('chatStart', (data) => {
+  console.log('Chat started', data);
   status.textContent = 'Connected. Starting video call...';
   messageInput.disabled = false;
   sendButton.disabled = false;
@@ -141,10 +141,7 @@ socket.on('chatStart', () => {
   messages.innerHTML = '';
   addMessage('You are now connected to a stranger. Say hi!', 'system');
   
-  // Initiate peer connection (first user is the initiator)
-  setTimeout(() => {
-    initiatePeerConnection(true);
-  }, 100);
+  initiatePeerConnection(Boolean(data && data.initiator));
 });
 
 socket.on('webrtc-offer', (offer) => {
